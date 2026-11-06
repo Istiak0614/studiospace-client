@@ -48,7 +48,7 @@ export function StudioCard({ studio }: { studio: Studio }) {
             </Link>
           </h3>
 
-          <div className="mt-2 space-y-1.5 text-sm text-muted-foreground">
+          <div className="mb-5 mt-2 space-y-1.5 text-sm text-muted-foreground">
             <p className="flex items-center gap-1.5 line-clamp-1">
               <MapPin className="size-4 shrink-0 text-primary" />
               <span className="truncate">{studio.location}</span>
