@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { AuthDivider, GoogleButton } from "./google-button";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,12 +20,24 @@ interface LoginErrors {
 
 const inputClass = "h-11 rounded-xl bg-background/50";
 
-export function LoginForm({ redirectTo }: { redirectTo: string }) {
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  google: "Google sign-in was cancelled or failed. Please try again.",
+  state_mismatch: "Your Google sign-in timed out. Please try again.",
+  access_denied: "Google sign-in was cancelled.",
+};
+
+export function LoginForm({ redirectTo, authError }: { redirectTo: string; authError?: string }) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<LoginErrors>({});
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!authError) return;
+    toast.error(AUTH_ERROR_MESSAGES[authError] ?? "Sign-in failed. Please try again.", { id: "auth-error" });
+    router.replace(redirectTo === "/" ? "/login" : `/login?redirect=${encodeURIComponent(redirectTo)}`);
+  }, [authError, redirectTo, router]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -50,7 +63,10 @@ export function LoginForm({ redirectTo }: { redirectTo: string }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-5">
+        <>
+      <GoogleButton redirectTo={redirectTo} />
+      <AuthDivider />
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
       <FormField id="email" label="Email" error={errors.email}>
         <Input
           id="email"
@@ -101,5 +117,6 @@ export function LoginForm({ redirectTo }: { redirectTo: string }) {
         </Link>
       </p>
     </form>
+    </>
   );
 }

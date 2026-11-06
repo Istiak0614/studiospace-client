@@ -12,6 +12,7 @@ import { PASSWORD_RULES, isValidEmail, isValidUrl, validatePassword } from "@/li
 import { cn } from "@/lib/utils";
 import { FormField } from "./form-field";
 import { PasswordInput } from "./password-input";
+import { AuthDivider, GoogleButton } from "./google-button";
 
 interface RegisterErrors {
   name?: string;
@@ -66,7 +67,10 @@ export function RegisterForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} noValidate className="space-y-5">
+        <>
+      <GoogleButton label="Sign up with Google" />
+      <AuthDivider />
+      <form onSubmit={handleSubmit} noValidate className="space-y-5">
       <FormField id="name" label="Full name" error={errors.name}>
         <Input id="name" autoComplete="name" placeholder="Your name" value={form.name}
           onChange={update("name")} aria-invalid={!!errors.name} className={inputClass} />
@@ -115,6 +119,6 @@ export function RegisterForm() {
           Login
         </Link>
       </p>
-    </form>
+    </form></>
   );
 }

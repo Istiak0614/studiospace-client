@@ -5,8 +5,12 @@ import { safeRedirect } from "@/lib/validators";
 
 export const metadata: Metadata = { title: "Login | StudioSpace" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ redirect?: string }> }) {
-  const { redirect } = await searchParams;
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ redirect?: string; error?: string }>;
+}) {
+  const { redirect, error } = await searchParams;
 
   return (
     <AuthShell
@@ -19,7 +23,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         "Manage your own studio listings in one place",
       ]}
     >
-      <LoginForm redirectTo={safeRedirect(redirect)} />
+      <LoginForm redirectTo={safeRedirect(redirect)} authError={error} />
     </AuthShell>
   );
 }
