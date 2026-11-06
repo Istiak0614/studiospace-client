@@ -1,3 +1,4 @@
+import { FeaturedStudios } from "@/components/home/featured-studios";
 import { HeroSlider } from "@/components/home/hero-slider";
 import { serverFetch } from "@/lib/server-api";
 import type { Studio } from "@/types/studio";
@@ -9,6 +10,7 @@ export default async function HomePage() {
   return (
     <>
       <HeroSlider images={heroImages} />
+      <FeaturedStudios studios={featured} />
     </>
   );
 }
