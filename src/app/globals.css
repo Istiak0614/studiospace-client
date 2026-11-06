@@ -148,6 +148,8 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  padding-inline-end: 0.12em;   /* room for the italic overhang */
+  margin-inline-end: -0.06em;
 }
 
 @layer base {
