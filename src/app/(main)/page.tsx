@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 async function getApiStatus() {
   try {
@@ -14,11 +13,8 @@ export default async function Home() {
   const status = await getApiStatus();
 
   return (
-    <main className="grid min-h-screen place-items-center px-4">
+    <div className="grid min-h-[80vh] place-items-center px-4">
       <div className="glass w-full max-w-lg space-y-6 rounded-3xl p-10 text-center">
-        <div className="flex justify-end">
-          <ThemeToggle />
-        </div>
         <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">Setting the stage</p>
         <h1 className="text-5xl font-semibold">
           <span className="text-gradient">StudioSpace</span>
@@ -32,6 +28,6 @@ export default async function Home() {
           <span className={status === "connected" ? "text-primary" : "text-destructive"}>{status}</span>
         </p>
       </div>
-    </main>
+    </div>
   );
 }
