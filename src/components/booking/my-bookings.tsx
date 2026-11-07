@@ -17,6 +17,7 @@ import type { Booking } from "@/types/booking";
 import { StatusBadge, cancelReason } from "./status-badge";
 import { BadgeCheck, MessageSquarePlus } from "lucide-react";
 import { ReviewDialog } from "./review-dialog";
+import { InvoiceButton } from "./invoice-button";
 
 const FILTERS = ["All", "Upcoming", "Pending", "Confirmed", "Completed", "Cancelled"] as const;
 type Filter = (typeof FILTERS)[number];
@@ -165,6 +166,9 @@ export function MyBookings() {
                             <MessageSquarePlus className="size-4" /> Leave a review
                           </Button>
                         ))}
+                      {(booking.status === "Confirmed" || booking.status === "Completed") && (
+                        <InvoiceButton booking={booking} />
+                      )}
                        
                       
                     </div>
