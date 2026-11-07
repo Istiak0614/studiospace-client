@@ -12,6 +12,7 @@ import { formatCurrency, formatDate, getInitials } from "@/lib/format";
 import { serverFetch } from "@/lib/server-api";
 import type { Review } from "@/types/review";
 import type { Studio } from "@/types/studio";
+import { WishlistButton } from "@/components/wishlist/wishlist-button";
 
 type Params = Promise<{ id: string }>;
 
@@ -49,7 +50,10 @@ export default async function StudioDetailsPage({ params }: { params: Params }) 
         <span className="mb-4 inline-block rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary">
           {studio.category}
         </span>
-        <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">{studio.title}</h1>
+                <div className="flex items-start justify-between gap-4">
+          <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">{studio.title}</h1>
+          <WishlistButton studioId={studio._id} variant="outline" className="mt-2 size-11 shrink-0" />
+        </div>
         <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <span className="flex items-center gap-2">
             {studio.reviewCount > 0 ? (

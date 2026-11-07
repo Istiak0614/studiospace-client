@@ -15,6 +15,8 @@ import { formatBookingDate, formatCurrency, formatTimeRange } from "@/lib/format
 import { cn } from "@/lib/utils";
 import type { Booking } from "@/types/booking";
 import { StatusBadge, cancelReason } from "./status-badge";
+import { BadgeCheck, MessageSquarePlus } from "lucide-react";
+import { ReviewDialog } from "./review-dialog";
 
 const FILTERS = ["All", "Upcoming", "Pending", "Confirmed", "Completed", "Cancelled"] as const;
 type Filter = (typeof FILTERS)[number];
@@ -30,9 +32,16 @@ export function MyBookings() {
   const [failed, setFailed] = useState(false);
   const [filter, setFilter] = useState<Filter>("All");
   const [toCancel, setToCancel] = useState<Booking | null>(null);
+  const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
+  const [toReview, setToReview] = useState<Booking | null>(null);
 
-  useEffect(() => {
-    apiRequest<Booking[]>("/bookings/mine").then(setBookings).catch(() => setFailed(true));
+    useEffect(() => {
+    Promise.all([apiRequest<Booking[]>("/bookings/mine"), apiRequest<string[]>("/reviews/mine")])
+      .then(([list, reviewed]) => {
+        setBookings(list);
+        setReviewedIds(new Set(reviewed));
+      })
+      .catch(() => setFailed(true));
   }, []);
 
   const counts = useMemo(
@@ -146,6 +155,17 @@ export function MyBookings() {
                           Cancel
                         </Button>
                       )}
+                      {booking.status === "Completed" &&
+                        (reviewedIds.has(booking._id) ? (
+                          <span className="flex items-center gap-1.5 rounded-full bg-violet-500/15 px-3 py-1.5 text-xs font-medium text-violet-600 dark:text-violet-300">
+                            <BadgeCheck className="size-4" /> Reviewed
+                          </span>
+                        ) : (
+                          <Button size="sm" onClick={() => setToReview(booking)} className="rounded-full">
+                            <MessageSquarePlus className="size-4" /> Leave a review
+                          </Button>
+                        ))}
+                       
                       
                     </div>
                   </div>
@@ -167,6 +187,11 @@ export function MyBookings() {
         }
         confirmLabel="Yes, cancel it"
         onConfirm={handleCancel}
+      />
+      <ReviewDialog
+        booking={toReview}
+        onOpenChange={(open) => !open && setToReview(null)}
+        onReviewed={(id) => setReviewedIds((prev) => new Set(prev).add(id))}
       />
     </div>
   );
