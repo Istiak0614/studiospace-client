@@ -6,5 +6,8 @@ export const NAV_LINKS = [
 ];
 
 
-export const isActiveLink = (pathname: string, href: string) =>
-  href === "/" ? pathname === "/" : pathname.startsWith(href);
+export const isActiveLink = (pathname: string, href: string) => {
+  if (href === "/") return pathname === "/";
+  if (pathname.startsWith("/studios/edit")) return false;
+  return pathname.startsWith(href);
+};
