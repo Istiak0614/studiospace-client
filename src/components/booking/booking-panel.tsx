@@ -10,7 +10,6 @@ import { formatCurrency } from "@/lib/format";
 import type { Studio } from "@/types/studio";
 import { BookingModal } from "./booking-modal";
 
-// The real booking button: opens the modal
 function BookNowButton({ studio, className }: { studio: Studio; className?: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -55,7 +54,9 @@ function BookAction({ studio, className }: { studio: Studio; className?: string 
 }
 
 export function BookingPanel({ studio }: { studio: Studio }) {
-  return (
+    const { data: session } = useSession();
+    const isOwner = session?.user.email === studio.ownerEmail;
+    return (
     <aside className="glass-strong sticky top-28 rounded-3xl p-6 shadow-2xl shadow-accent/10">
       <div className="flex items-end justify-between">
         <p>
@@ -81,8 +82,10 @@ export function BookingPanel({ studio }: { studio: Studio }) {
 
       <BookAction studio={studio} className="w-full" />
 
-      <p className="mt-4 text-center text-xs text-muted-foreground">
-        You won&apos;t be charged yet. The host confirms your request first, and the deposit is refundable.
+            <p className="mt-4 text-center text-xs text-muted-foreground">
+        {isOwner
+          ? "This is your listing. Creators see a booking button here."
+          : "You won't be charged yet. The host confirms your request first, and the deposit is refundable."}
       </p>
     </aside>
   );
