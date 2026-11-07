@@ -1,13 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { toast } from "sonner";
 import { CalendarCheck, Pencil, ShieldCheck, Star, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSession } from "@/lib/auth-client";
 import { formatCurrency } from "@/lib/format";
 import type { Studio } from "@/types/studio";
+import { BookingModal } from "./booking-modal";
+
+// The real booking button: opens the modal
+function BookNowButton({ studio, className }: { studio: Studio; className?: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button
+        onClick={() => setOpen(true)}
+        className={`h-12 rounded-full text-base shadow-xl shadow-primary/30 ${className}`}
+      >
+        <CalendarCheck className="size-5" />
+        Book Workspace Now
+      </Button>
+      <BookingModal studio={studio} open={open} onOpenChange={setOpen} />
+    </>
+  );
+}
 
 function BookAction({ studio, className }: { studio: Studio; className?: string }) {
   const { data: session, isPending } = useSession();
@@ -33,15 +51,7 @@ function BookAction({ studio, className }: { studio: Studio; className?: string 
     );
   }
 
-  return (
-    <Button
-      onClick={() => toast.info("The booking calendar arrives in the next update.")}
-      className={`h-12 rounded-full text-base shadow-xl shadow-primary/30 ${className}`}
-    >
-      <CalendarCheck className="size-5" />
-      Book Workspace Now
-    </Button>
-  );
+    return <BookNowButton studio={studio} className={className} />;
 }
 
 export function BookingPanel({ studio }: { studio: Studio }) {
