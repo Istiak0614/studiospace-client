@@ -1,0 +1,42 @@
+"use client";
+
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { formatCurrency } from "@/lib/format";
+
+type Point = { month: string; earnings: number };
+
+function ChartTooltip({ active, payload, label }: { active?: boolean; payload?: { value: number }[]; label?: string }) {
+  if (!active || !payload?.length) return null;
+  return (
+    <div className="glass-strong rounded-xl px-3 py-2 text-sm shadow-xl">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="font-semibold">{formatCurrency(payload[0].value)}</p>
+    </div>
+  );
+}
+
+export function EarningsChart({ data }: { data: Point[] }) {
+  return (
+    <>
+      <div className="relative">
+        <div className="h-64" role="img" aria-label="Bar chart of earnings for the last 6 months">
+        </div>
+        {data.every((d) => d.earnings === 0) && (
+          <div className="absolute inset-0 grid place-items-center">
+            <p className="glass rounded-full px-4 py-2 text-sm text-muted-foreground">
+              No earnings yet. Confirmed bookings at your studios appear here.
+            </p>
+          </div>
+        )}
+      </div>
+
+      <table className="sr-only">
+        <caption>Earnings by month</caption>
+        <thead><tr><th>Month</th><th>Earnings</th></tr></thead>
+        <tbody>
+          {data.map((d) => <tr key={d.month}><td>{d.month}</td><td>{formatCurrency(d.earnings)}</td></tr>)}
+        </tbody>
+      </table>
+    </>
+  );
+}
