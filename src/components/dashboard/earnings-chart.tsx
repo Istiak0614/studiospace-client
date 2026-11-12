@@ -20,6 +20,18 @@ export function EarningsChart({ data }: { data: Point[] }) {
     <>
       <div className="relative">
         <div className="h-64" role="img" aria-label="Bar chart of earnings for the last 6 months">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={data} margin={{ top: 8, right: 8, left: -12, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+              <XAxis dataKey="month" tickLine={false} axisLine={false}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
+              <YAxis tickLine={false} axisLine={false} width={56} allowDecimals={false}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                tickFormatter={(v: number) => formatCurrency(v)} />
+              <Tooltip content={<ChartTooltip />} cursor={{ fill: "var(--border)" }} />
+              <Bar dataKey="earnings" fill="var(--chart-1)" radius={[8, 8, 0, 0]} maxBarSize={44} />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
         {data.every((d) => d.earnings === 0) && (
           <div className="absolute inset-0 grid place-items-center">
