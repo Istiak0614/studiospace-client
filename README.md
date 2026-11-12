@@ -54,9 +54,9 @@ The demo account hosts a studio (with a pending request to confirm), has booking
 |---|---|
 | ![Explore page](./screenshots/explore.png) | ![Booking modal](./screenshots/booking.png) |
 
-| Host dashboard | Dark mode |
+| Host dashboard | Wishlist (dark mode) |
 |---|---|
-| ![Dashboard](./screenshots/dashboard.png) | ![Dark mode](./screenshots/dark-mode.png) |
+| ![Dashboard](./screenshots/dashboard.png) | ![Wishlist in dark mode](./screenshots/dark-mode.png) |
 
 ---
 
